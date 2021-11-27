@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('title');
             $table->string('slug');
             $table->string('date');
-            $table->integer('day');
+            $table->string('day');
             $table->softDeletes();
             $table->timestamps();
         });

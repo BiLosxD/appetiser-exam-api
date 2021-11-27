@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
 	Route::get('events', 'API\EventController@index');
+	Route::post('events', 'API\EventController@store');
 });
