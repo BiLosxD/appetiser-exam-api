@@ -9,11 +9,19 @@ use Carbon\Carbon;
 
 class EventController extends Controller
 {
-	public function index () {
+	public function index (Request $r) {
 		$records = Event::select('id', 'title', 'date', 'day')->get();
+		$result = [];
+
+		foreach ($records as $key => $record) {
+			$date = Carbon::parse($record->date)->format('Y-n');
+			if ($date == $r->date) {
+				array_push($result, $record);
+			}
+		}
 
 		return response([
-			'records' => $records
+			'records' => $result
 		]);
 	}
 	public function store (Request $r) {
@@ -28,6 +36,14 @@ class EventController extends Controller
 			return response([
 				'errors' => $validator->errors()->all()
 			], 403);
+		}
+
+		if ($r->override == 1) {
+			$events = Event::select('id')->get();
+
+			foreach ($events as $key => $event) {
+				$event->delete();
+			}
 		}
 
 		$from = Carbon::parse($r->from);
@@ -63,7 +79,7 @@ class EventController extends Controller
 		}
 
 		return response([
-			'record' => $temp_days
+			'record' => 'success'
 		]);
 	}
 }
